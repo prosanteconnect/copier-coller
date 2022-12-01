@@ -41,7 +41,7 @@ job "copier-coller-api" {
         mount {
           type = "bind"
           target = "/app/json-schemas-repo/"
-          source = "local/json-schemas-repo/"
+          source = "local/json-schemas/"
           readonly = "false"
           bind_options {
             propagation = "rshared"
