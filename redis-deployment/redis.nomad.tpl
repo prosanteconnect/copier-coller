@@ -7,7 +7,7 @@ job "redis-copier-coller" {
 
   vault {
     policies = [
-      "psc-ecosystem"]
+      "poc-policy"]
     change_mode = "restart"
   }
 
@@ -39,7 +39,7 @@ job "redis-copier-coller" {
         destination = "secrets/redis.conf"
         change_mode = "restart"
         data = <<EOH
-{{ with secret "psc-ecosystem/${nomad_namespace}" }}
+{{ with secret "psc-ecosystem/copier-coller" }}
 #user {{ .Data.data.redis_username }}
 requirepass {{ .Data.data.redis_password }}
 {{ end }}
