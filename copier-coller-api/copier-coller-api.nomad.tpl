@@ -32,17 +32,7 @@ job "copier-coller-api" {
       driver = "docker"
 
       artifact {
-        source = "https://github.com/prosanteconnect/copier-coller/raw/main/resources/patient-info.json"
-        options {
-          archive = "false"
-        }
-      }
-      
-      artifact {
-        source = "https://github.com/prosanteconnect/copier-coller/raw/main/resources/alternative-schema.json"
-        options {
-          archive = "false"
-        }
+        source = "https://github.com/prosanteconnect/copier-coller/raw/main/resources/json-schemas.zip"
       }
 
       config {
@@ -50,17 +40,8 @@ job "copier-coller-api" {
         ports = ["http"]
         mount {
           type = "bind"
-          target = "/app/json-schemas-repo/patient-info.json"
-          source = "local/patient-info.json"
-          readonly = "false"
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-        mount {
-          type = "bind"
-          target = "/app/json-schemas-repo/alternative-schema.json"
-          source = "local/alternative-schema.json"
+          target = "/app/json-schemas-repo/"
+          source = "local/"
           readonly = "false"
           bind_options {
             propagation = "rshared"
