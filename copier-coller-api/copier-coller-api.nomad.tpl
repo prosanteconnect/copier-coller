@@ -4,7 +4,7 @@ job "copier-coller-api" {
   namespace = "${nomad_namespace}"
 
   vault {
-    policies = ["psc-ecosystem"]
+    policies = ["poc-policy"]
     change_mode = "restart"
   }
 
@@ -32,14 +32,14 @@ job "copier-coller-api" {
       driver = "docker"
 
       artifact {
-        source = "https://github.com/prosanteconnect/sharing-json-schemas/raw/main/patient-info.json"
+        source = "https://github.com/prosanteconnect/copier-coller/raw/main/resources/patient-info.json"
         options {
           archive = "false"
         }
       }
       
       artifact {
-        source = "https://github.com/prosanteconnect/sharing-json-schemas/raw/main/alt.json"
+        source = "https://github.com/prosanteconnect/copier-coller/raw/main/resources/alternative-schema.json"
         options {
           archive = "false"
         }
@@ -59,8 +59,8 @@ job "copier-coller-api" {
         }
         mount {
           type = "bind"
-          target = "/app/json-schemas-repo/alt.json"
-          source = "local/alt.json"
+          target = "/app/json-schemas-repo/alternative-schema.json"
+          source = "local/alternative-schema.json"
           readonly = "false"
           bind_options {
             propagation = "rshared"
@@ -73,7 +73,7 @@ job "copier-coller-api" {
         destination = "local/file.env"
         env = true
         data = <<EOH
-PUBLIC_HOSTNAME={{ with secret "psc-ecosystem/${nomad_namespace}" }}{{ .Data.data.api_public_hostname }}{{ end }}
+PUBLIC_HOSTNAME={{ with secret "poc/copier-coller" }}{{ .Data.data.api_public_hostname }}{{ end }}
 JAVA_TOOL_OPTIONS="-Xms256m -Xmx1g -XX:+UseG1GC -Dspring.config.location=/secrets/application.properties -Dlogging.level.fr.ans.psc=${log_level}"
 EOH
       }
@@ -88,7 +88,7 @@ server.servlet.contextPath=/psc-copier-coller/api
 logging.level.org.springframework=ERROR
 
 #ProSanteConnect introspection Endpoint
-{{ with secret "psc-ecosystem/${nomad_namespace}" }}
+{{ with secret "poc/copier-coller" }}
 psc.url.introspection={{ .Data.data.introspection_url }}
 psc.url.userinfo={{ .Data.data.userinfo_url }}
 psc.clientID={{ .Data.data.psc_client_id }}
@@ -96,9 +96,9 @@ psc.clientSecret={{ .Data.data.psc_client_secret }}
 {{ end }}
 
 spring.redis.database=0
-spring.redis.host={{ range service "${nomad_namespace}-redis-share-context" }}{{ .Address }}{{ end }}
-spring.redis.port={{ range service "${nomad_namespace}-redis-share-context" }}{{ .Port }}{{ end }}
-{{ with secret "psc-ecosystem/${nomad_namespace}" }}
+spring.redis.host={{ range service "${nomad_namespace}-redis-copier-coller" }}{{ .Address }}{{ end }}
+spring.redis.port={{ range service "${nomad_namespace}-redis-copier-coller" }}{{ .Port }}{{ end }}
+{{ with secret "poc/copier-coller" }}
 #spring.redis.username={{ .Data.data.redis_username }}
 spring.redis.password={{ .Data.data.redis_password }}
 {{ end }}
