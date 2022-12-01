@@ -16,12 +16,41 @@ app "redis" {
   build {
     use "docker-pull" {
       image = "redis"
-      tag = "latest"
+      tag   = "latest"
     }
     registry {
       use "docker" {
-        image = "prosanteconnect/redis"
-        tag = "latest"
+        image    = "prosanteconnect/redis"
+        tag      = "latest"
+        username = var.registry_username
+        password = var.registry_password
+        local    = true
+      }
+    }
+  }
+
+  deploy {
+    use "nomad-jobspec" {
+      jobspec = templatefile("${path.app}/redis-deployment/redis.nomad.tpl", {
+        datacenter      = var.datacenter
+        image           = "redis"
+        tag             = "latest"
+        nomad_namespace = var.nomad_namespace
+      })
+    }
+  }
+}
+
+app "api" {
+  build {
+    use "docker" {
+      dockerfile = "${path.app}/copier-coller-api/Dockerfile"
+    }
+
+    registry {
+      use "docker" {
+        image = "${var.registry_username}/copier-coller-api"
+        tag = gitrefpretty()
         username = var.registry_username
         password = var.registry_password
         local = true
@@ -31,43 +60,42 @@ app "redis" {
 
   deploy {
     use "nomad-jobspec" {
-      jobspec = templatefile("${path.app}/redis-deployment/redis.nomad.tpl", {
+      jobspec = templatefile("${path.app}/copier-coller-api/copier-coller-api.nomad.tpl", {
         datacenter = var.datacenter
-        image = "redis"
-        tag = "latest"
         nomad_namespace = var.nomad_namespace
+        log_level = var.log_level
       })
     }
   }
 }
 
 variable "datacenter" {
-  type = string
+  type    = string
   default = ""
-  env = ["NOMAD_DATACENTER"]
+  env     = ["NOMAD_DATACENTER"]
 }
 
 variable "nomad_namespace" {
-  type = string
+  type    = string
   default = ""
-  env = ["NOMAD_NAMESPACE"]
+  env     = ["NOMAD_NAMESPACE"]
 }
 
 variable "registry_username" {
-  type    = string
-  default = ""
-  env     = ["REGISTRY_USERNAME"]
+  type      = string
+  default   = ""
+  env       = ["REGISTRY_USERNAME"]
   sensitive = true
 }
 
 variable "registry_password" {
-  type    = string
-  default = ""
-  env     = ["REGISTRY_PASSWORD"]
+  type      = string
+  default   = ""
+  env       = ["REGISTRY_PASSWORD"]
   sensitive = true
 }
 
 variable "log_level" {
-  type = string
+  type    = string
   default = "INFO"
 }
