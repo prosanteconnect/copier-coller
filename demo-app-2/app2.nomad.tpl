@@ -1,4 +1,4 @@
-job "copier-coller-demo-app-1" {
+job "copier-coller-demo-app-2" {
   datacenters = ["${datacenter}"]
   type = "service"
   namespace = "${nomad_namespace}"
@@ -13,7 +13,7 @@ job "copier-coller-demo-app-1" {
     value = "standard"
   }
 
-  group "demo-app-1" {
+  group "demo-app-2" {
     count = "1"
     restart {
       attempts = 3
@@ -28,7 +28,7 @@ job "copier-coller-demo-app-1" {
       }
     }
 
-    task "demo-app-1" {
+    task "demo-app-2" {
       driver = "docker"
 
       config {
@@ -41,7 +41,7 @@ job "copier-coller-demo-app-1" {
         destination = "local/file.env"
         env = true
         data = <<EOH
-PUBLIC_HOSTNAME={{ with secret "poc/copier-coller" }}{{ .Data.data.demo_app_1_public_hostname }}{{ end }}
+PUBLIC_HOSTNAME={{ with secret "poc/copier-coller" }}{{ .Data.data.demo_app_2_public_hostname }}{{ end }}
 JAVA_TOOL_OPTIONS="-Xms256m -Xmx1g -XX:+UseG1GC -Dspring.config.location=/secrets/application.properties -Dlogging.level.fr.ans.psc=${log_level}"
 EOH
       }
@@ -59,7 +59,7 @@ spring.security.oauth2.client.registration.prosanteconnect.clientSecret={{ .Data
 spring.security.oauth2.client.registration.prosanteconnect.provider=prosanteconnect
 spring.security.oauth2.client.registration.prosanteconnect.authorization-grant-type=authorization_code
 spring.security.oauth2.client.registration.prosanteconnect.client-name=prosanteconnect
-spring.security.oauth2.client.registration.prosanteconnect.redirect-uri=https://{{ .Data.data.demo_app_1_public_hostname }}/login/oauth2/code/prosanteconnect
+spring.security.oauth2.client.registration.prosanteconnect.redirect-uri=https://{{ .Data.data.demo_app_2_public_hostname }}/login/oauth2/code/prosanteconnect
 spring.security.oauth2.client.registration.prosanteconnect.scope=scope_all
 spring.security.oauth2.client.registration.prosanteconnect.client-authentication-method=client_secret_post
 
@@ -90,6 +90,6 @@ EOF
           failures_before_critical = "3"
         }
       }
-      }
+    }
   }
 }
