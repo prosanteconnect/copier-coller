@@ -11,7 +11,7 @@ job "redis-copier-coller" {
     change_mode = "restart"
   }
 
-  group "redis-share-context" {
+  group "redis-copier-coller" {
     count = "1"
 
     restart {
