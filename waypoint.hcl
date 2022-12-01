@@ -41,17 +41,17 @@ app "redis" {
   }
 }
 
-app "api" {
+#app "api" {
+#
+#}
 
-}
+#app "demo-app-1" {
+#
+#}
 
-app "demo-app-1" {
-
-}
-
-app "demo-app-2" {
-
-}
+#app "demo-app-2" {
+#
+#}
 
 variable "datacenter" {
   type = string
