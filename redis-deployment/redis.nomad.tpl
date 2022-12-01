@@ -7,7 +7,7 @@ job "redis-copier-coller" {
 
   vault {
     policies = [
-      "psc-ecosystem"]
+      "poc-policy"]
     change_mode = "restart"
   }
 
