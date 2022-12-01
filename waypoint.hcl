@@ -69,6 +69,33 @@ app "api" {
   }
 }
 
+app "demo-app-1" {
+  build {
+    use "docker" {
+      dockerfile = "${path.app}/demo-app-1/Dockerfile"
+    }
+    registry {
+      use "docker" {
+        image = "${var.registry_username}/demo-app-1"
+        tag = gitrefpretty()
+        username = var.registry_username
+        password = var.registry_password
+        local = true
+      }
+    }
+  }
+
+  deploy {
+    use "nomad-jobspec" {
+      jobspec = templatefile("${path.app}/demo-app-1/app1.nomad.tpl", {
+        datacenter = var.datacenter
+        nomad_namespace = var.nomad_namespace
+        log_level = var.log_level
+      })
+    }
+  }
+}
+
 variable "datacenter" {
   type    = string
   default = ""
