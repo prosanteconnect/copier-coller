@@ -1,0 +1,13 @@
+package fr.ans.psc.context.sharing.api;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ContextSharingApiApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ContextSharingApiApplication.class, args);
+	}
+
+}

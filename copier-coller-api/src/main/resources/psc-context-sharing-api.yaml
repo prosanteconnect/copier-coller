@@ -1,0 +1,153 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: Context sharing API backed on ProSanteConnect
+    url: http://localhost:8080/psc-copier-coller/api
+info:
+  version: "1.0.0"
+  title: Context sharing API backed on ProSanteConnect
+  description: ""
+paths:
+  /discovery:
+    get:
+      summary: Get all registered schemas
+      description: Returns all registered schemas
+      operationId: get-all-schemas
+      parameters:
+        - schema:
+            type: boolean
+            default: false
+          name: details
+          in: query
+          required: false
+      responses:
+        200:
+          description: Schemas found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PscContextSchema'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+    post:
+      summary: Post new json schema
+      description: Post new json schema
+      operationId: add-new-schema
+      responses:
+        201:
+          description: New Json schema successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PscContextSchema'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        409:
+          description: Already exists
+    put:
+      summary: Update existing json schema
+      description: Update existing json schema
+      operationId: update-schema
+      responses:
+        200:
+          description: Json schema successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PscContextSchema'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+  /discovery/{schemaId}:
+    get:
+      summary: Get specific schema
+      description: Get specific schema
+      parameters:
+        - schema:
+            type: string
+          name: schemaId
+          in: path
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PscContextSchema'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        409:
+          description: Already exists
+  /share:
+    put:
+      security:
+        - bearerAuth: [ ]
+      summary: Put PscContext in cache
+      description: Put PscContext in cache
+      responses:
+        200:
+          description: Json schema successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PscContext'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Get PscContext from cache
+      description: Get PscContext from cache
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PscContext'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+components:
+  schemas:
+    PscContext:
+      description: PscContext wrapper
+      type: object
+      properties:
+        psId:
+          type: string
+        schemaId:
+          type: string
+        bag:
+          type: object
+      required: ['schemaId', 'bag']
+    PscContextSchema:
+      description: pscContext bag json-schema
+      type: object
+      properties:
+        schemaId:
+          type: string
+        schema:
+          type: string
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "urn:jsonschema:fr:ans:psc:alt",
+  "description": "a context with basic Ps and patient infos",
+  "type" : "object",
+  "properties": {
+    "ps": {
+      "title": "Ps",
+      "description": "",
+      "$ref": "#/$defs/ps"
+    },
+    "patient" : {
+      "title": "Patient",
+      "description": "",
+      "$ref": "#/$defs/patient"
+    }
+  },
+  "required" : ["ps"],
+  "additionalProperties": false,
+  "$defs": {
+    "ps": {
+      "type": "object",
+      "properties": {
+        "nationalId": {"type":  "string"},
+        "health_structure": {
+          "title": "Structure de soins",
+          "description": "",
+          "$ref": "#/$defs/health_structure"
+        }
+      },
+      "required": ["nationalId","health_structure"],
+      "additionalProperties": false
+    },
+    "patient": {
+      "type": "object",
+      "properties": {
+        "patientINS": {"type":  "string"}
+      },
+      "additionalProperties": false
+    },
+    "health_structure": {
+      "type": "object",
+      "properties": {
+        "structureTechnicalId": {"type": "string"}
+      },
+      "required": ["structureTechnicalId"],
+      "additionalProperties": false
+    }
+  }
+}
