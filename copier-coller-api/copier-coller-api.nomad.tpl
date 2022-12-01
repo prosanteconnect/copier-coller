@@ -41,7 +41,7 @@ job "copier-coller-api" {
         mount {
           type = "bind"
           target = "/app/json-schemas-repo/"
-          source = "local/"
+          source = "local/json-schemas-repo/"
           readonly = "false"
           bind_options {
             propagation = "rshared"
@@ -51,7 +51,7 @@ job "copier-coller-api" {
 
       # env variables
       template {
-        destination = "var/file.env"
+        destination = "local/file.env"
         env = true
         data = <<EOH
 PUBLIC_HOSTNAME={{ with secret "poc/copier-coller" }}{{ .Data.data.api_public_hostname }}{{ end }}
