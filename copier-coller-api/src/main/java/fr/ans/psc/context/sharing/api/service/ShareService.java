@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Optional;
 import java.util.Set;
 
@@ -81,9 +78,13 @@ public class ShareService {
                 log.error("Json-schema validation failed");
                 throw new PscSchemaException();
             }
+            inputStream.close();
         } catch (FileNotFoundException e) {
             log.error("Unknown schema submitted");
             throw new PscSchemaException();
+        } catch (IOException e) {
+            log.error("IO Exception occurred when closing stream for {}", pscContext.getSchemaId());
+            throw new RuntimeException(e);
         }
     }
 }

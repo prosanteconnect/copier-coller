@@ -55,7 +55,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = ContextSharingApiApplication.class)
 public class ShareControllerTest {
     protected MemoryAppender memoryAppender;
-    protected final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @Autowired
     private MockMvc mockMvc;

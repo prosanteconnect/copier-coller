@@ -13,13 +13,6 @@ paths:
       summary: Get all registered schemas
       description: Returns all registered schemas
       operationId: get-all-schemas
-      parameters:
-        - schema:
-            type: boolean
-            default: false
-          name: details
-          in: query
-          required: false
       responses:
         200:
           description: Schemas found
