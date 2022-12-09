@@ -1,5 +1,4 @@
 let pscContext;
-const mappingUrl = window.location.origin + '/patient-info-mapping.json'
 
 function getFromCache(serverUrl) {
     $.get(serverUrl, function (data) {
@@ -17,8 +16,8 @@ function getFromCache(serverUrl) {
     });
 }
 
-function fillForm() {
-    $.getJSON(mappingUrl, function(data) {
+function fillForm(mappingFilePath) {
+    $.getJSON(window.location.origin + mappingFilePath, function(data) {
         for (const [key, value] of Object.entries(data)) {
             if (document.getElementById(key)) {
                 $('#' + key).val(_.get(pscContext, value, ''))
@@ -27,10 +26,10 @@ function fillForm() {
     })
 }
 
-function putInCache(schemaName, serverUrl, viewURL) {
+function putInCache(schemaName, serverUrl, viewURL, mappingFilePath) {
     let putPscContext = {};
 
-    $.getJSON(mappingUrl, function (data) {
+    $.getJSON(window.location.origin + mappingFilePath, function (data) {
         for (const [key, value] of Object.entries(data)) {
             if (document.getElementById(key)) {
                 _.set(putPscContext, value, document.getElementById(key).value)

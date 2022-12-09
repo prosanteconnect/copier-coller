@@ -93,7 +93,7 @@
                 <h4>Bilan de consultation</h4>
                 <!-- START add prefill button -->
                 <button type="button" class=" badge badge-pill badge-success" hidden
-                        style="margin: 5px" id="btnPreFill" onclick="fillForm()">
+                        style="margin: 5px" id="btnPreFill" onclick="fillForm('/patient-info-mapping.json')">
                     Préremplir
                 </button>
                 <button type="button" data-toggle="tooltip" data-placement="top" data-html="true"
@@ -169,7 +169,7 @@
                 <div style="display: flex; flex-direction: row; padding: 5px">
                     <!-- START add ajax call to share controller before submitting -->
                     <button type="button" class=" btn btn--plain btn--primary"
-                            onclick="putInCache('patient-info', '/secure/share', '/secure/consultation')" style="margin: 5px">Enregistrer
+                            onclick="putInCache('patient-info', '/secure/share', '/secure/consultation', '/patient-info-mapping.json')" style="margin: 5px">Enregistrer
                     </button>
                     <!-- END add ajax call to share controller before submitting -->
                 </div>
