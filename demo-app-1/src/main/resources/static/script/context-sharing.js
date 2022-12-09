@@ -1,5 +1,4 @@
 let pscContext;
-// const mappingUrl = window.location.origin + '/patient-info-mapping.json'
 
 function getFromCache(serverURL) {
     $.get(serverURL, function (data) {
