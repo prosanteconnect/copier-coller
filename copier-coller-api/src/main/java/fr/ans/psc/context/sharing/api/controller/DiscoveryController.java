@@ -17,7 +17,7 @@ public class DiscoveryController {
 
     @Autowired
     private DiscoveryService discovery;
-    @GetMapping
+    @GetMapping(produces = {"application/json"})
     public ResponseEntity<String> getAllRegisteredSchemas() {
         try {
             List<String> schemas = discovery.getAllSchemas();
@@ -27,7 +27,7 @@ public class DiscoveryController {
         }
     }
 
-    @GetMapping("/{schemaId}")
+    @GetMapping(value = "/{schemaId}", produces = {"application/json"})
     public ResponseEntity<String> getSchemaById(@PathVariable String schemaId) {
         try {
             String schema = discovery.getPscJsonContextSchema(schemaId);
